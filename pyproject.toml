@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "courcework"
+version = "0.1.0"
+description = ""
+authors = ["ildar-vk <kalimov.ildar.v@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.3.0"
+mypy = "^1.18.2"
+black = "^25.9.0"
+isort = "^6.1.0"
+flake8-black = "^0.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+# Указываем, что line-length = 88 (стандарт для black) и нужно игнорировать папку venv
+line-length = 88
+target-version = ['py311'] # Укажи свою версию Python, например, py310, py39
+include = '\.pyi?$'
+exclude = '''
+/(
+  # ... стандартные исключения black
+  | venv
+  | .venv
+)/
+'''
+
+[tool.isort]
+# Говорим isort использовать настройки, совместимые с black
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.flake8]
+# Настраиваем flake8, чтобы он не конфликтовал с black
+max-line-length = 88
+extend-ignore = "E203, W503, E501"
+# E203, W503 - конфликтуют с black. E501 (line too long) - за этим следит black.
+exclude = [".venv", "venv", "migrations"]
+
+[tool.mypy]
+# Базовая конфигурация для mypy
+python_version = "3.11" # Укажи свою версию
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
