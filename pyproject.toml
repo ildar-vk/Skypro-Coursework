@@ -7,6 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+openpyxl = "^3.1.5"
+xlrd = "^2.0.2"
+pandas = "^2.3.3"
+tqdm = "^4.67.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,7 +26,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 # Указываем, что line-length = 88 (стандарт для black) и нужно игнорировать папку venv
-line-length = 88
+line-length = 119
 target-version = ['py311'] # Укажи свою версию Python, например, py310, py39
 include = '\.pyi?$'
 exclude = '''
@@ -37,12 +41,12 @@ exclude = '''
 # Говорим isort использовать настройки, совместимые с black
 profile = "black"
 multi_line_output = 3
-line_length = 88
+line_length = 119
 
 [tool.flake8]
 # Настраиваем flake8, чтобы он не конфликтовал с black
-max-line-length = 88
-extend-ignore = "E203, W503, E501"
+max-line-length = 119
+extend-ignore = "E203, W503, E501,E821"
 # E203, W503 - конфликтуют с black. E501 (line too long) - за этим следит black.
 exclude = [".venv", "venv", "migrations"]
 
