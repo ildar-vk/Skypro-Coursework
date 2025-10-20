@@ -1,0 +1,16 @@
+Index: src/utils.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import logging\nimport sys\n\nfrom datatime import datetime\nfrom typi\n\ndef setup_logging() -> None:\n    logging.basicConfig(\n        level=logging.INFO,\n        format=\"%(asctime)s - %(name)s - %(levelname)s - %(message)s\",\n        handlers=[\n            logging.FileHandler('bank_analysis.log'),\n            logging.StreamHandler(sys.stdout),\n        ]\n    )\n    print(\"Логирование настроено\")\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/utils.py b/src/utils.py
+--- a/src/utils.py	(revision 14615ab3167a2b9cebc0597cac4b684a4a41abfe)
++++ b/src/utils.py	(date 1760942195612)
+@@ -1,4 +1,4 @@
+-import logging
++git pullimport logging
+ import sys
+ 
+ from datatime import datetime
