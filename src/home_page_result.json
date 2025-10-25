@@ -1,0 +1,29 @@
+{
+  "greeting": "Доброе утро",
+  "cards": [],
+  "top_transactions": [],
+  "currency_rates": [
+    {
+      "currency": "USD",
+      "rate": 75.0
+    },
+    {
+      "currency": "EUR",
+      "rate": 85.0
+    }
+  ],
+  "stock_prices": [
+    {
+      "stock": "AAPL",
+      "price": 150.0
+    },
+    {
+      "stock": "AMZN",
+      "price": 3200.0
+    },
+    {
+      "stock": "GOOGL",
+      "price": 2800.0
+    }
+  ]
+}
