@@ -40,11 +40,11 @@ def home_page(target_date: str, data_file: str = "data/operations.xlsx") -> Dict
             "stock_prices": get_stock_prices()
         }
 
-        logger.info("Главная страница успешно сформирована")
+        logger.info(f"{__name__}.[home_page] Главная страница успешно сформирована")
         return result
 
     except Exception as e:
-        logger.error(f"Ошибка: {e}")
+        logger.error(f"{__name__}.[home_page] Ошибка: {e}")
         return {
             "greeting": get_greeting(),
             "cards": [],

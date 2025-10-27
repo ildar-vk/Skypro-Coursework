@@ -42,7 +42,6 @@ def validate_fail(file_path: str) -> bool:
 def get_excel_engine(file_extension:str) -> str:
     """Возвращает движок для чтения файла"""
     engins = {'.xlsx': "openpyxl", '.xls': "xlrd"}
-
     engine = engins.get(file_extension)
     logger.info(f'Выбран: {engine} для {file_extension}')
     return engine
@@ -70,8 +69,8 @@ def process_bank_file(file_path: str) -> pd.DataFrame:
 
     # 1. Проверка существования файла
     if not check_file(file_path):
-        error_msg = f"СТОП ПРОГРАММЫ! {__name__}/[process_bank_file]->[def check_file]-> {file_path}"
-        error_msg_1= f' На функции {__name__}/[process_bank_file] работа программы остановленна! '
+        error_msg = f"СТОП ПРОГРАММЫ! [{__name__}/.process_bank_file]->[def check_file]-> {file_path}"
+        error_msg_1= f' На функции [{__name__}/.process_bank_file] работа программы остановлена! '
         logger.error(error_msg)
         raise ValueError( error_msg_1)
 

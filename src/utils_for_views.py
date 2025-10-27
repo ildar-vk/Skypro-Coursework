@@ -1,4 +1,3 @@
-# src/view_helpers.py
 """
 Вспомогательные функции для views.
 Содержит бизнес-логику для формирования данных веб-страниц.
@@ -14,7 +13,6 @@ logger = logging.getLogger(__name__)
 def get_greeting() -> str:
     """
     Определяет приветствие в зависимости от времени суток.
-
     """
     try:
         current_hour = datetime.now().hour
@@ -28,7 +26,7 @@ def get_greeting() -> str:
         else:
             return "Доброй ночи"
     except Exception as e:
-        logger.warning(f"{__name__} [get_greeting] Ошибка определения времени: {e}")
+        logger.warning(f"{__name__}.[get_greeting] Ошибка определения времени: {e}")
         return "Добро пожаловать"
 
 
@@ -47,11 +45,11 @@ def filter_transactions_by_month(transactions: List[Dict], target_date: str) -> 
             if month_start <= op_date <= target_dt:
                 filtered.append(transaction)
 
-        logger.info(f"Отфильтровано {len(filtered)} из {len(transactions)} транзакций")
+        logger.info(f"{__name__}.[filter_transactions_by_month] Отфильтровано {len(filtered)} из {len(transactions)} транзакций")
         return filtered
 
     except Exception as e:
-        logger.error(f"Ошибка фильтрации транзакций: {e}")
+        logger.error(f"{__name__}.[filter_transactions_by_month] Ошибка фильтрации транзакций: {e}")
         return transactions
 
 
@@ -83,7 +81,7 @@ def analyze_cards(transactions: List[Dict]) -> List[Dict[str, Any]]:
                 "cashback": round(cashback, 2)
             })
 
-        logger.info(f"Проанализировано {len(cards_data)} карт")
+        logger.info(f"{__name__}.[analyze_cards] Проанализировано {len(cards_data)} карт")
 
     except Exception as e:
         logger.error(f"Ошибка анализа карт: {e}")
@@ -96,7 +94,7 @@ def get_top_transactions(transactions: List[Dict], limit: int = 5) -> List[Dict[
     Находит топ транзакций по сумме платежа (только расходы) из списка транзакций.
     """
     try:
-        logger.info(f"Поиск топ {limit} транзакций (расходы) из {len(transactions)}")
+        logger.info(f"{__name__}.[get_top_transactions] Поиск топ {limit} транзакций (расходы) из {len(transactions)}")
 
         # Фильтруем только расходы (отрицательные суммы)
         expenses = [t for t in transactions if t.get('Сумма операции', 0) < 0]
@@ -131,7 +129,7 @@ def get_top_transactions(transactions: List[Dict], limit: int = 5) -> List[Dict[
                 "description": transaction.get('Описание', 'Без описания')
             })
 
-        logger.info(f"Найдено {len(top_transactions)} топ транзакций (расходы)")
+        logger.info(f"{__name__}.[get_top_transactions] Найдено {len(top_transactions)} топ транзакций (расходы)")
         return top_transactions
 
     except Exception as e:
@@ -141,9 +139,6 @@ def get_top_transactions(transactions: List[Dict], limit: int = 5) -> List[Dict[
 def get_currency_rates() -> List[Dict[str, Any]]:
     """
     Получает курсы валют (заглушка).
-
-    Returns:
-        Список словарей с курсами валют
     """
     # TODO: Реализовать через API
     return [
@@ -155,9 +150,6 @@ def get_currency_rates() -> List[Dict[str, Any]]:
 def get_stock_prices() -> List[Dict[str, Any]]:
     """
     Получает цены акций (заглушка).
-
-    Returns:
-        Список словарей с ценами акций
     """
     # TODO: Реализовать через API
     return [
