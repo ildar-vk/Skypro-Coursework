@@ -19,27 +19,19 @@ logger = logging.getLogger(__name__)
 
 
 def home_page(target_date: str, data_file: str = "data/operations.xlsx") -> Dict[str, Any]:
-    """
-    Генерирует JSON-данные для главной страницы.
-
-    Args:
-        target_date: Дата в формате 'YYYY-MM-DD HH:MM:SS'
-        data_file: Путь к файлу с транзакциями
-
-    Returns:
-        Словарь с данными для JSON-ответа
-    """
-    logger.info(f"Начало формирования главной страницы для даты: {target_date}")
+    logger.info(f"=== НАЧАЛО ФОРМИРОВАНИЯ ГЛАВНОЙ СТРАНИЦЫ ===")
 
     try:
         # 1. Загружаем данные
         df = process_bank_file(data_file)
         transactions = df.to_dict("records")
+        logger.info(f"Загружено {len(transactions)} транзакций")
 
-        # 2. Фильтруем данные по месяцу
-        filtered_transactions = filter_transactions_by_month(transactions, target_date)
+        # 2. ВРЕМЕННО: ИСПОЛЬЗУЕМ ВСЕ ТРАНЗАКЦИИ БЕЗ ФИЛЬТРАЦИИ
+        filtered_transactions = transactions
+        logger.info(f"ИСПОЛЬЗУЕМ ВСЕ {len(filtered_transactions)} ТРАНЗАКЦИЙ (фильтрация отключена)")
 
-        # 3. Собираем все компоненты (делегируем работу хелперам)
+        # 3. Собираем компоненты
         result = {
             "greeting": get_greeting(),
             "cards": analyze_cards(filtered_transactions),
@@ -52,8 +44,7 @@ def home_page(target_date: str, data_file: str = "data/operations.xlsx") -> Dict
         return result
 
     except Exception as e:
-        logger.error(f"Критическая ошибка в home_page: {e}")
-        # Возвращаем базовую структуру при ошибке
+        logger.error(f"Ошибка: {e}")
         return {
             "greeting": get_greeting(),
             "cards": [],

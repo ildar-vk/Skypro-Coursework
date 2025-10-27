@@ -16,7 +16,7 @@ def main():
     try:
         # ТЕСТ 1: Загрузка данных (твой оригинальный код)
         print("\n📊 ТЕСТ 1: Загрузка данных из Excel...")
-        file_path = "data/operations.xlsx"
+        file_path = "/home/oem/PycharmProjects/Courcework/data/operations.xlsx"
         df = process_bank_file(file_path)
         print(f"✅ Готово! Загружено {len(df)} транзакций")
 
@@ -43,20 +43,36 @@ def main():
 
         # ТЕСТ 3: Показываем пример данных
         print("\n📋 ТЕСТ 3: Пример данных из результата:")
+
+        # ИСПРАВЛЕНО: показываем данные по картам
         if result['cards']:
             print("\n💳 Данные по картам:")
-            for card in result['cards'][:2]:  # Показываем первые 2 карты
-                print(f"   • Карта ...{card['last_digits']}:")
-                print(f"     Потрачено: {card['total_spent']} руб")
-                print(f"     Кешбэк: {card['cashback']} руб")
+            for card in result['cards'][:3]:  # Показываем первые 3 карты
+                last_digits = card.get('last_digits', '0000')
+                total_spent = card.get('total_spent', 0)
+                cashback = card.get('cashback', 0)
+                print(f"   • Карта ...{last_digits}:")
+                print(f"     Потрачено: {total_spent:,.2f} руб")
+                print(f"     Кешбэк: {cashback:,.2f} руб")
 
+        # ИСПРАВЛЕНО: показываем топ транзакции
         if result['top_transactions']:
             print("\n📈 Топ транзакции:")
-            for i, transaction in enumerate(result['top_transactions'][:3], 1):  # Первые 3
-                print(f"   {i}. {transaction['date']} - {transaction['amount']} руб")
-                print(f"      Категория: {transaction['category']}")
-                desc = transaction['description']
-                print(f"      Описание: {desc[:50]}{'...' if len(desc) > 50 else ''}")
+            for i, transaction in enumerate(result['top_transactions'][:5], 1):  # Первые 5
+                date = transaction.get('date', 'N/A')
+                amount = transaction.get('amount', 0)
+                category = transaction.get('category', 'Не указана')
+                description = transaction.get('description', 'Без описания')
+
+                # Заменяем 'nan' на 'Не указана'
+                if str(category).lower() == 'nan':
+                    category = 'Не указана'
+
+                print(f"   {i}. {date} - {amount:,.2f} руб")
+                print(f"      Категория: {category}")
+                # Обрезаем длинные описания
+                short_desc = description[:60] + "..." if len(description) > 60 else description
+                print(f"      Описание: {short_desc}")
 
         print("\n💹 Курсы валют:")
         for currency in result['currency_rates']:

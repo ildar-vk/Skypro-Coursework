@@ -90,34 +90,48 @@ def analyze_cards(transactions: List[Dict]) -> List[Dict[str, Any]]:
 
     return cards_data
 
+
 def get_top_transactions(transactions: List[Dict], limit: int = 5) -> List[Dict[str, Any]]:
     """
-    Находит топ транзакций по сумме платежа из списка транзакций.
+    Находит топ транзакций по сумме платежа (только расходы) из списка транзакций.
     """
     try:
-        # Сортируем по абсолютной сумме платежа
-        sorted_transactions = sorted(
-            transactions,
-            key=lambda x: abs(x.get('Сумма платежа', 0)),
+        logger.info(f"Поиск топ {limit} транзакций (расходы) из {len(transactions)}")
+
+        # Фильтруем только расходы (отрицательные суммы)
+        expenses = [t for t in transactions if t.get('Сумма операции', 0) < 0]
+        logger.info(f"Найдено {len(expenses)} расходных операций")
+
+        # Сортируем по абсолютной сумме (по убыванию)
+        sorted_expenses = sorted(
+            expenses,
+            key=lambda x: abs(x.get('Сумма операции', 0)),
             reverse=True
         )
 
         top_transactions = []
-        for transaction in sorted_transactions[:limit]:
+        for transaction in sorted_expenses[:limit]:
             op_date = transaction['Дата операции']
             if isinstance(op_date, str):
-                date_str = op_date[:10]  # Берем только дату
+                date_str = op_date.split()[0]  # Берем только дату
             else:
-                date_str = str(op_date)[:10]
+                date_str = str(op_date).split()[0]
+
+            amount = transaction.get('Сумма операции', 0)
+            category = transaction.get('Категория', 'Не указана')
+
+            # Заменяем nan на "Не указана"
+            if pd.isna(category):
+                category = "Не указана"
 
             top_transactions.append({
                 "date": date_str,
-                "amount": round(transaction.get('Сумма платежа', 0), 2),
-                "category": transaction.get('Категория', 'Не указана'),
+                "amount": round(amount, 2),
+                "category": category,
                 "description": transaction.get('Описание', 'Без описания')
             })
 
-        logger.info(f"Найдено {len(top_transactions)} топ транзакций")
+        logger.info(f"Найдено {len(top_transactions)} топ транзакций (расходы)")
         return top_transactions
 
     except Exception as e:
