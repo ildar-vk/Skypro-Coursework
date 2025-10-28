@@ -1,10 +1,11 @@
 import json
 import logging
-from views import home_page
+
 from utils import process_bank_file, setup_logging
+from views import home_page
 
 
-def main():
+def main() -> None:
     """Главная функция для тестирования ВСЕГО проекта."""
     setup_logging()
     logger = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ def main():
         print(f"   • Акций: {len(result['stock_prices'])}")
 
         # Сохраняем полный результат в файл
-        with open('home_page_result.json', 'w', encoding='utf-8') as f:
+        with open("home_page_result.json", "w", encoding="utf-8") as f:
             json.dump(result, f, indent=2, ensure_ascii=False)
         print(" Полный результат сохранен в 'home_page_result.json'")
 
@@ -44,28 +45,28 @@ def main():
         print("\n ТЕСТ 3: Пример данных из результата:")
 
         # Показываем данные по картам
-        if result['cards']:
+        if result["cards"]:
             print("\n Данные по картам:")
-            for card in result['cards'][:3]:  # Показываем первые 3 карты
-                last_digits = card.get('last_digits', '0000')
-                total_spent = card.get('total_spent', 0)
-                cashback = card.get('cashback', 0)
+            for card in result["cards"][:3]:  # Показываем первые 3 карты
+                last_digits = card.get("last_digits", "0000")
+                total_spent = card.get("total_spent", 0)
+                cashback = card.get("cashback", 0)
                 print(f"     Карта ...{last_digits}:")
                 print(f"     Потрачено: {total_spent:,.2f} руб")
                 print(f"     Кешбэк: {cashback:,.2f} руб")
 
         #  Показываем топ транзакции
-        if result['top_transactions']:
+        if result["top_transactions"]:
             print("\n📈 Топ транзакции:")
-            for i, transaction in enumerate(result['top_transactions'][:5], 1):  # Первые 5
-                date = transaction.get('date', 'N/A')
-                amount = transaction.get('amount', 0)
-                category = transaction.get('category', 'Не указана')
-                description = transaction.get('description', 'Без описания')
+            for i, transaction in enumerate(result["top_transactions"][:5], 1):  # Первые 5
+                date = transaction.get("date", "N/A")
+                amount = transaction.get("amount", 0)
+                category = transaction.get("category", "Не указана")
+                description = transaction.get("description", "Без описания")
 
                 # Заменяем 'nan' на 'Не указана'
-                if str(category).lower() == 'nan':
-                    category = 'Не указана'
+                if str(category).lower() == "nan":
+                    category = "Не указана"
 
                 print(f"   {i}. {date} - {amount:,.2f} руб")
                 print(f"      Категория: {category}")
@@ -74,11 +75,11 @@ def main():
                 print(f"      Описание: {short_desc}")
 
         print("\n Курсы валют:")
-        for currency in result['currency_rates']:
+        for currency in result["currency_rates"]:
             print(f"   • {currency['currency']}: {currency['rate']} руб")
 
         print("\n Акции S&P500:")
-        for stock in result['stock_prices']:
+        for stock in result["stock_prices"]:
             print(f"   • {stock['stock']}: ${stock['price']}")
 
         print("\n" + "=" * 60)
@@ -89,10 +90,10 @@ def main():
         print(f"{__name__}->.Теcт 1. Ошибка: Файл не найден! Проверь путь: {file_path}")
         print(" Убедись, что файл operations.xlsx находится в папке data/")
 
-
     except Exception as e:
         logger.error(f"Ошибка в main: {e}")
         import traceback
+
         logger.error(traceback.format_exc())
         print(f"Критическая ошибка: {e}")
         print("Проверь логи в файле 'bank_analysis.log'")
