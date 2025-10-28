@@ -173,3 +173,17 @@ class TestErrorCases:
         """Тест фильтрации пустого списка транзакций"""
         result = filter_transactions_by_month([], "2023-02-28 23:59:59")
         assert result == []
+
+    def test_get_currency_rates_with_template_key(self, monkeypatch):
+        """Тест получения курсов валют с шаблонным ключом"""
+        monkeypatch.setenv('EXCHANGE_RATE_API_KEY', 'your_exchange_rate_key_here')
+        result = get_currency_rates()
+        assert isinstance(result, list)
+        assert len(result) > 0
+
+    def test_get_stock_prices_with_template_key(self, monkeypatch):
+        """Тест получения цен акций с шаблонным ключом"""
+        monkeypatch.setenv('ALPHA_VANTAGE_API_KEY', 'your_alpha_vantage_key_here')
+        result = get_stock_prices()
+        assert isinstance(result, list)
+        assert len(result) > 0

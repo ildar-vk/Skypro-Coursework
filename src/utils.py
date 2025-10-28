@@ -27,16 +27,12 @@ def check_file(file_path: str) -> bool:
     return exists
 
 
-def validate_fail(file_path: str) -> bool:
-    """Проверяем и возвращаем расширение файла"""
-    file_extension= os.path.splitext(file_path)[1].lower()
-    if file_extension not in ['.xlsx', '.xls']:
-        error_message = f'[{__name__}.validate_fail] Формат файла не поддерживается {file_extension}'
-        logger.error(error_message)
-        raise ValueError(error_message)
+def validate_file(file_path: str) -> bool:
+    """Проверяет формат файла."""
+    valid_extensions = ['.xlsx', '.xls']
+    file_extension = os.path.splitext(file_path)[1]
+    return file_extension in valid_extensions
 
-    logger.info(f'[{__name__}.validate_fail] Верный формат файла {file_extension}')
-    return file_extension # Даллее переменая передается в сл. функцию как аргумент
 
 
 def get_excel_engine(file_extension:str) -> str:
@@ -75,7 +71,7 @@ def process_bank_file(file_path: str) -> pd.DataFrame:
         raise ValueError( error_msg_1)
 
     # 2. Валидация расширения
-    file_ext = validate_fail(file_path)
+    file_ext = validate_file(file_path)
 
     # 3. Получение движка
     engine = get_excel_engine(file_ext)
@@ -85,3 +81,4 @@ def process_bank_file(file_path: str) -> pd.DataFrame:
 
     logger.info(f"{__name__}/[process_bank_file] Файл успешно обработан. Загружено {len(df)} транзакций")
     return df
+
