@@ -1,5 +1,5 @@
 {
-  "greeting": "Доброе утро",
+  "greeting": "Доброй ночи",
   "cards": [
     {
       "last_digits": "4556",
@@ -7,9 +7,9 @@
       "cashback": 17688.37
     },
     {
-      "last_digits": "5091",
-      "total_spent": 17367.5,
-      "cashback": 173.68
+      "last_digits": "5507",
+      "total_spent": 84000.0,
+      "cashback": 840.0
     },
     {
       "last_digits": "5441",
@@ -17,9 +17,9 @@
       "cashback": 4708.55
     },
     {
-      "last_digits": "7197",
-      "total_spent": 2389912.73,
-      "cashback": 23899.13
+      "last_digits": "6002",
+      "total_spent": 69200.0,
+      "cashback": 692.0
     },
     {
       "last_digits": "1112",
@@ -27,14 +27,14 @@
       "cashback": 462.07
     },
     {
-      "last_digits": "6002",
-      "total_spent": 69200.0,
-      "cashback": 692.0
+      "last_digits": "7197",
+      "total_spent": 2389912.73,
+      "cashback": 23899.13
     },
     {
-      "last_digits": "5507",
-      "total_spent": 84000.0,
-      "cashback": 840.0
+      "last_digits": "5091",
+      "total_spent": 17367.5,
+      "cashback": 173.68
     }
   ],
   "top_transactions": [
@@ -72,11 +72,15 @@
   "currency_rates": [
     {
       "currency": "USD",
-      "rate": 75.0
+      "rate": 0.01
     },
     {
       "currency": "EUR",
-      "rate": 85.0
+      "rate": 0.01
+    },
+    {
+      "currency": "GBP",
+      "rate": 0.01
     }
   ],
   "stock_prices": [
