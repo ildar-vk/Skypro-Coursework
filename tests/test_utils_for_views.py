@@ -206,3 +206,26 @@ class TestFilterTransactions:# не работает
         assert '15.01.2023 12:00:00' not in dates
         assert '20.02.2023 12:00:00' in dates
         assert '05.03.2023 12:00:00' not in dates
+
+
+# Добавьте в tests/test_utils_for_views.py
+
+class TestErrorCases:
+    """Тесты для обработки ошибок"""
+
+    def test_analyze_cards_with_invalid_data(self):
+        """Тест анализа карт с некорректными данными"""
+        invalid_transactions = [
+            {'Номер карты': None, 'Сумма операции': -100},
+            {'Номер карты': '', 'Сумма операции': -200},
+            {'Номер карты': '   ', 'Сумма операции': -300},
+        ]
+
+        result = analyze_cards(invalid_transactions)
+        assert isinstance(result, list)
+
+    def test_filter_transactions_empty(self):
+        """Тест фильтрации пустого списка транзакций"""
+        result = filter_transactions_by_month([], "2023-02-28 23:59:59")
+        assert result == []
+
