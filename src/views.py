@@ -1,7 +1,3 @@
-# src/views.py
-"""
-Модуль views - содержит основные функции для генерации JSON ответов.
-"""
 import logging
 import sys
 import os
@@ -46,10 +42,11 @@ def home_page(target_date: str, data_file: str = "data/operations.xlsx") -> Dict
         transactions = df.to_dict("records")
         logger.info(f"Загружено {len(transactions)} транзакций")
 
-        # ВРЕМЕННО: ИСПОЛЬЗУЕМ ВСЕ ТРАНЗАКЦИИ БЕЗ ФИЛЬТРАЦИИ
-        filtered_transactions = transactions
-        logger.info(f"ИСПОЛЬЗУЕМ ВСЕ {len(filtered_transactions)} ТРАНЗАКЦИЙ (фильтрация отключена)")
 
+        # filtered_transactions = transactions
+        # logger.info(f"ИСПОЛЬЗУЕМ ВСЕ {len(filtered_transactions)} ТРАНЗАКЦИЙ (фильтрация отключена)")
+        filtered_transactions = filter_transactions_by_month(transactions, target_date)
+        logger.info(f"Отфильтровано {len(filtered_transactions)} транзакций за период до {target_date}")
         # Собираем компоненты
         result = {
             "greeting": get_greeting(),

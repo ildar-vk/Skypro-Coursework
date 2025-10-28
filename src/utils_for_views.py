@@ -36,18 +36,52 @@ def get_greeting() -> str:
 
 def filter_transactions_by_month(transactions: List[Dict], target_date: str) -> List[Dict]:
     """Фильтрует список транзакций по месяцу"""
-    filtered = []
-    # Парсим целевую дату с временем
-    target_dt = pd.to_datetime(target_date, format='%Y-%m-%d %H:%M:%S')
-    month_start = target_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    try:
+        if not transactions:
+            logger.warning("Получен пустой список транзакций для фильтрации")
+            return []
 
-    for transaction in transactions:
-        op_date = pd.to_datetime(transaction['Дата операции'], format='%d.%m.%Y %H:%M:%S')
+        # Парсим целевую дату
+        target_dt = pd.to_datetime(target_date, format='%Y-%m-%d %H:%M:%S')
 
-        if month_start <= op_date <= target_dt:
-            filtered.append(transaction)
+        # Для отладки - посмотрим на первые несколько дат в данных
+        sample_dates = []
+        for i, t in enumerate(transactions[:5]):
+            if 'Дата операции' in t:
+                sample_dates.append(t['Дата операции'])
+        logger.info(f"Пример дат в данных: {sample_dates}")
+        logger.info(f"Целевая дата фильтрации: {target_dt}")
 
-    return filtered
+        filtered = []
+        skipped_count = 0
+
+        for transaction in transactions:
+            try:
+                op_date_str = transaction.get('Дата операции')
+                if not op_date_str or pd.isna(op_date_str):
+                    skipped_count += 1
+                    continue
+
+                # Парсим дату операции (формат: 'дд.мм.гггг чч:мм:сс')
+                op_date = pd.to_datetime(op_date_str, format='%d.%m.%Y %H:%M:%S')
+
+                # Проверяем, что дата операции в том же году и месяце, что и целевая
+                if op_date.year == target_dt.year and op_date.month == target_dt.month:
+                    filtered.append(transaction)
+
+            except Exception as e:
+                logger.warning(f"Ошибка парсинга даты '{op_date_str}': {e}")
+                skipped_count += 1
+                continue
+
+        logger.info(
+            f"Отфильтровано {len(filtered)} транзакций за {target_dt.month}.{target_dt.year}, пропущено {skipped_count}")
+        return filtered
+
+    except Exception as e:
+        logger.error(f"Критическая ошибка в filter_transactions_by_month: {e}")
+        # В случае ошибки возвращаем все транзакции как fallback
+        return transactions
 
 
 def analyze_cards(transactions: List[Dict]) -> List[Dict[str, Any]]:

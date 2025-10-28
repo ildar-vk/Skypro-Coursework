@@ -18,7 +18,7 @@ setup_logging()
 
 logger = logging.getLogger(__name__)
 
-###Далее идет блок функций для корректной работы с файлом операций###
+#Далее идет блок функций для корректной работы с файлом операций
 def check_file(file_path: str) -> bool:
     """Проверяем есть ли файл в директории"""
     exists = os.path.exists(file_path)
@@ -54,7 +54,7 @@ def read_excel_file(file_path: str,engine: str) -> pd.DataFrame:
         error_message = f'[{__name__}.read_excel_file] ошибка чтения файла{e}'
         logger.error(error_message)
         raise
-## Конец блока кода чтения файлов ###############################################
+# Конец блока кода чтения файлов
 
 def process_bank_file(file_path: str) -> pd.DataFrame:
     """

@@ -14,19 +14,30 @@ def main() -> None:
     print("=" * 60)
 
     try:
-        # ТЕСТ 1: Загрузка данных (твой оригинальный код)
+        # ТЕСТ 1: Загрузка данных
         file_path = "/home/oem/PycharmProjects/Courcework/data/operations.xlsx"
         print(f"\n ТЕСТ 1: Загрузка данных из Excel {file_path}")
         df = process_bank_file(file_path)
         print(f"Готово! Загружено {len(df)} транзакций")
 
-        # Показываем немного информации о данных
-        print(f"   • Колонки: {list(df.columns)}")
-        print(f"   • Диапазон дат: от {df['Дата операции'].min()} до {df['Дата операции'].max()}")
+        # Определяем подходящую дату на основе данных
+        if not df.empty and 'Дата операции' in df.columns:
+            # Находим максимальную дату в данных
+            max_date_str = df['Дата операции'].max()
+            try:
+                max_date = pd.to_datetime(max_date_str, format='%d.%m.%Y %H:%M:%S')
+                # Используем последний день данных как целевую дату
+                test_date = max_date.strftime('%Y-%m-%d %H:%M:%S')
+                print(f"   • Используем дату из данных: {test_date}")
+            except:
+                test_date = "2021-12-31 14:30:00"  # fallback
+        else:
+            test_date = "2021-12-31 14:30:00"  # fallback
+
+        print(f"   • Диапазон дат в данных: от {df['Дата операции'].min()} до {df['Дата операции'].max()}")
 
         # ТЕСТ 2: Главная страница
         print("\n ТЕСТ 2: Генерация главной страницы...")
-        test_date = "2024-01-15 14:30:00"
         result = home_page(test_date, file_path)
 
         print("Главная страница сгенерирована успешно!")
@@ -41,6 +52,7 @@ def main() -> None:
             json.dump(result, f, indent=2, ensure_ascii=False)
         print(" Полный результат сохранен в 'home_page_result.json'")
 
+        # Остальной код остается без изменений...
         # ТЕСТ 3: Показываем пример данных
         print("\n ТЕСТ 3: Пример данных из результата:")
 
@@ -55,10 +67,10 @@ def main() -> None:
                 print(f"     Потрачено: {total_spent:,.2f} руб")
                 print(f"     Кешбэк: {cashback:,.2f} руб")
 
-        #  Показываем топ транзакции
+        # Показываем топ транзакции
         if result["top_transactions"]:
             print("\n📈 Топ транзакции:")
-            for i, transaction in enumerate(result["top_transactions"][:5], 1):  # Первые 5
+            for i, transaction in enumerate(result["top_transactions"][:5], 1):
                 date = transaction.get("date", "N/A")
                 amount = transaction.get("amount", 0)
                 category = transaction.get("category", "Не указана")
@@ -70,7 +82,6 @@ def main() -> None:
 
                 print(f"   {i}. {date} - {amount:,.2f} руб")
                 print(f"      Категория: {category}")
-                # Обрезаем длинные описания
                 short_desc = description[:60] + "..." if len(description) > 60 else description
                 print(f"      Описание: {short_desc}")
 
@@ -93,13 +104,10 @@ def main() -> None:
     except Exception as e:
         logger.error(f"Ошибка в main: {e}")
         import traceback
-
         logger.error(traceback.format_exc())
         print(f"Критическая ошибка: {e}")
         print("Проверь логи в файле 'bank_analysis.log'")
-        # Выводим также traceback в консоль для удобства
         traceback.print_exc()
-
 
 if __name__ == "__main__":
     main()
