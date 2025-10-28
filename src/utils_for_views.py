@@ -7,7 +7,7 @@ import logging
 import requests
 from datetime import datetime
 from typing import Any, Dict, List
-from .config import Config
+from config import Config
 
 import pandas as pd
 

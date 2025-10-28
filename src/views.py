@@ -1,18 +1,38 @@
+# src/views.py
 """
 Модуль views - содержит основные функции для генерации JSON ответов.
-Соответствует принципу "тонкие views, толстые модели".
 """
-
 import logging
-from typing import Any, Dict
-from .utils import process_bank_file
-from .utils_for_views import (
-    get_greeting,
-    analyze_cards,
-    get_top_transactions,
-    get_currency_rates,
-    get_stock_prices
-)
+import sys
+import os
+from typing import Dict, Any
+
+# Добавляем текущую директорию в путь для импортов
+sys.path.append(os.path.dirname(__file__))
+
+# Универсальные импорты
+try:
+    # Для запуска из корня проекта (тесты)
+    from utils import process_bank_file
+    from utils_for_views import (
+        get_greeting,
+        filter_transactions_by_month,
+        analyze_cards,
+        get_top_transactions,
+        get_currency_rates,
+        get_stock_prices
+    )
+except ImportError:
+    # Для запуска из папки src (основное приложение)
+    from .utils import process_bank_file
+    from .utils_for_views import (
+        get_greeting,
+        filter_transactions_by_month,
+        analyze_cards,
+        get_top_transactions,
+        get_currency_rates,
+        get_stock_prices
+    )
 
 logger = logging.getLogger(__name__)
 
