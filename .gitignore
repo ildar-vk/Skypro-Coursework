@@ -215,4 +215,11 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.tomluser_settings.json
 data/
+
+#Environment variables
 .env
+*.env
+
+#API keys
+*_key.txt
+*_token.txt

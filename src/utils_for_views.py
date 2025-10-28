@@ -4,8 +4,10 @@
 """
 
 import logging
+import requests
 from datetime import datetime
 from typing import Any, Dict, List
+from .config import Config
 
 import pandas as pd
 
@@ -130,15 +132,96 @@ def get_top_transactions(transactions: List[Dict], limit: int = 5) -> List[Dict[
 
 def get_currency_rates() -> List[Dict[str, Any]]:
     """
-    Получает курсы валют (заглушка).
+    Получает реальные курсы валют через API.
+    Если API недоступно, возвращает заглушку.
     """
-    # TODO: Реализовать через API
-    return [{"currency": "USD", "rate": 75.0}, {"currency": "EUR", "rate": 85.0}]
+    try:
+        # Проверяем наличие API ключа
+        if not Config.EXCHANGE_RATE_API_KEY:
+            logger.warning("API ключ для курсов валют не найден, используем заглушку")
+            return get_currency_rates_stub()
+
+        # Делаем реальный запрос к API
+        response = requests.get(Config.EXCHANGE_RATE_URL, timeout=10)
+
+        if response.status_code == 200:
+            data = response.json()
+            rates = data.get('rates', {})
+
+            # Возвращаем курсы для основных валют
+            return [
+                {"currency": "USD", "rate": round(rates.get('USD', 75.0), 2)},
+                {"currency": "EUR", "rate": round(rates.get('EUR', 85.0), 2)},
+                {"currency": "GBP", "rate": round(rates.get('GBP', 95.0), 2)},
+            ]
+        else:
+            logger.warning(f"Ошибка API курсов валют: {response.status_code}")
+            return get_currency_rates_stub()
+
+    except Exception as e:
+        logger.error(f"Ошибка получения курсов валют: {e}")
+        return get_currency_rates_stub()
+
+
+def get_currency_rates_stub() -> List[Dict[str, Any]]:
+    """Заглушка для курсов валют"""
+    return [
+        {"currency": "USD", "rate": 75.0},
+        {"currency": "EUR", "rate": 85.0}
+    ]
 
 
 def get_stock_prices() -> List[Dict[str, Any]]:
     """
-    Получает цены акций (заглушка).
+    Получает реальные цены акций через Alpha Vantage API.
+    Если API недоступно, возвращает заглушку.
     """
-    # TODO: Реализовать через API
-    return [{"stock": "AAPL", "price": 150.0}, {"stock": "AMZN", "price": 3200.0}, {"stock": "GOOGL", "price": 2800.0}]
+    try:
+        # Проверяем наличие API ключа
+        if not Config.ALPHA_VANTAGE_API_KEY:
+            logger.warning("API ключ для акций не найден, используем заглушку")
+            return get_stock_prices_stub()
+
+        stocks = ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]
+        stock_prices = []
+
+        for symbol in stocks:
+            params = {
+                'function': 'GLOBAL_QUOTE',
+                'symbol': symbol,
+                'apikey': Config.ALPHA_VANTAGE_API_KEY
+            }
+
+            response = requests.get(Config.ALPHA_VANTAGE_URL, params=params, timeout=10)
+
+            if response.status_code == 200:
+                data = response.json()
+                quote = data.get('Global Quote', {})
+                price = float(quote.get('05. price', 0))
+
+                if price > 0:
+                    stock_prices.append({
+                        "stock": symbol,
+                        "price": round(price, 2)
+                    })
+            else:
+                logger.warning(f"Ошибка API для акции {symbol}: {response.status_code}")
+
+        # Если получили хотя бы некоторые данные, возвращаем их
+        if stock_prices:
+            return stock_prices
+        else:
+            return get_stock_prices_stub()
+
+    except Exception as e:
+        logger.error(f"Ошибка получения цен акций: {e}")
+        return get_stock_prices_stub()
+
+
+def get_stock_prices_stub() -> List[Dict[str, Any]]:
+    """Заглушка для цен акций"""
+    return [
+        {"stock": "AAPL", "price": 150.0},
+        {"stock": "AMZN", "price": 3200.0},
+        {"stock": "GOOGL", "price": 2800.0}
+    ]
