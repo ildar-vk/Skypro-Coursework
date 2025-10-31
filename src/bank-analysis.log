@@ -1,0 +1,23 @@
+2025-10-31 10:01:59,045 - utils - INFO - Начало обработки файла: /home/oem/PycharmProjects/Courcework/data/operations.xlsx
+2025-10-31 10:01:59,046 - utils - INFO - Выбран: None для True
+2025-10-31 10:01:59,046 - utils - INFO - [utils.read_excel_file] Начало чтения файла /home/oem/PycharmProjects/Courcework/data/operations.xlsx c движком None
+2025-10-31 10:02:01,381 - utils - INFO - [utils.read_excel_file] Файл успешно прочитан,
+ Количество строк 6705
+2025-10-31 10:02:01,382 - utils - INFO - utils/[process_bank_file] Файл успешно обработан. Загружено 6705 транзакций
+2025-10-31 10:02:01,404 - views - INFO - === НАЧАЛО ФОРМИРОВАНИЯ ГЛАВНОЙ СТРАНИЦЫ ===
+2025-10-31 10:02:01,405 - utils - INFO - Начало обработки файла: /home/oem/PycharmProjects/Courcework/data/operations.xlsx
+2025-10-31 10:02:01,405 - utils - INFO - Выбран: None для True
+2025-10-31 10:02:01,405 - utils - INFO - [utils.read_excel_file] Начало чтения файла /home/oem/PycharmProjects/Courcework/data/operations.xlsx c движком None
+2025-10-31 10:02:03,162 - utils - INFO - [utils.read_excel_file] Файл успешно прочитан,
+ Количество строк 6705
+2025-10-31 10:02:03,162 - utils - INFO - utils/[process_bank_file] Файл успешно обработан. Загружено 6705 транзакций
+2025-10-31 10:02:03,228 - views - INFO - Загружено 6705 транзакций
+2025-10-31 10:02:03,229 - utils_for_views - INFO - Пример дат в данных: ['31.12.2021 16:44:00', '31.12.2021 16:42:04', '31.12.2021 16:39:04', '31.12.2021 15:44:39', '31.12.2021 01:23:42']
+2025-10-31 10:02:03,229 - utils_for_views - INFO - Целевая дата фильтрации: 2021-12-31 16:44:00
+2025-10-31 10:02:04,602 - utils_for_views - INFO - Отфильтровано 182 транзакций за 12.2021, пропущено 0
+2025-10-31 10:02:04,602 - views - INFO - Отфильтровано 182 транзакций за период до 2021-12-31 16:44:00
+2025-10-31 10:02:04,603 - utils_for_views - INFO - utils_for_views.[analyze_cards] Проанализировано 3 карт
+2025-10-31 10:02:04,603 - utils_for_views - INFO - utils_for_views.[get_top_transactions] Поиск топ 5 транзакций (расходы) из 182
+2025-10-31 10:02:04,603 - utils_for_views - INFO - Найдено 168 расходных операций
+2025-10-31 10:02:04,603 - utils_for_views - INFO - utils_for_views.[get_top_transactions] Найдено 5 топ транзакций (расходы)
+2025-10-31 10:02:08,261 - views - INFO - views.[home_page] Главная страница успешно сформирована
