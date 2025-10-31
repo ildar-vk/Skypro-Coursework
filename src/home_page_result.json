@@ -1,6 +1,11 @@
 {
-  "greeting": "Доброй ночи",
+  "greeting": "Доброе утро",
   "cards": [
+    {
+      "last_digits": "7197",
+      "total_spent": 24576.63,
+      "cashback": 245.77
+    },
     {
       "last_digits": "4556",
       "total_spent": 3775.7,
@@ -10,11 +15,6 @@
       "last_digits": "5091",
       "total_spent": 15193.33,
       "cashback": 151.93
-    },
-    {
-      "last_digits": "7197",
-      "total_spent": 24576.63,
-      "cashback": 245.77
     }
   ],
   "top_transactions": [

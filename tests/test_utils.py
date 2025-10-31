@@ -1,8 +1,9 @@
-# tests/test_utils.py
-import pytest
 import tempfile
+
 import pandas as pd
-from src.utils import process_bank_file, setup_logging, validate_file, read_excel_file
+import pytest
+
+from src.utils import process_bank_file, read_excel_file, setup_logging, validate_file
 
 
 def test_setup_logging():
@@ -36,18 +37,16 @@ def test_process_bank_file_invalid_path():
 def test_read_excel_file_basic():
     """Базовый тест чтения Excel файла"""
     # Создаем временный Excel файл для теста
-    test_data = pd.DataFrame({
-        'Дата операции': ['01.01.2023 12:00:00'],
-        'Сумма операции': [-100.0]
-    })
+    test_data = pd.DataFrame({"Дата операции": ["01.01.2023 12:00:00"], "Сумма операции": [-100.0]})
 
-    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as f:
+    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as f:
         test_data.to_excel(f.name, index=False)
 
         try:
-            result = read_excel_file(f.name, 'openpyxl')
+            result = read_excel_file(f.name, "openpyxl")
             assert isinstance(result, pd.DataFrame)
             assert len(result) == 1
         finally:
             import os
+
             os.unlink(f.name)

@@ -1,14 +1,10 @@
-# tests/test_utils_for_views.py
-import pytest
-import pandas as pd
-from datetime import datetime
 from src.utils_for_views import (
-    get_greeting,
     analyze_cards,
-    get_top_transactions,
+    filter_transactions_by_month,
     get_currency_rates,
+    get_greeting,
     get_stock_prices,
-    filter_transactions_by_month
+    get_top_transactions,
 )
 
 
@@ -35,24 +31,19 @@ class TestAnalyzeCards:
         """Тест с расходными операциями"""
         test_transactions = [
             {
-                'Номер карты': '1234567890123456',
-                'Сумма операции': -1000.0,
-                'Категория': 'Супермаркет',
-                'Описание': 'Покупки'
+                "Номер карты": "1234567890123456",
+                "Сумма операции": -1000.0,
+                "Категория": "Супермаркет",
+                "Описание": "Покупки",
             },
-            {
-                'Номер карты': '1234567890123456',
-                'Сумма операции': -500.0,
-                'Категория': 'Кафе',
-                'Описание': 'Обед'
-            }
+            {"Номер карты": "1234567890123456", "Сумма операции": -500.0, "Категория": "Кафе", "Описание": "Обед"},
         ]
 
         result = analyze_cards(test_transactions)
         assert len(result) == 1
-        assert result[0]['last_digits'] == '3456'
-        assert result[0]['total_spent'] == 1500.0
-        assert result[0]['cashback'] == 15.0
+        assert result[0]["last_digits"] == "3456"
+        assert result[0]["total_spent"] == 1500.0
+        assert result[0]["cashback"] == 15.0
 
 
 class TestGetTopTransactions:
@@ -67,8 +58,8 @@ class TestGetTopTransactions:
     def test_get_top_transactions_with_missing_fields(self):
         """Тест топ транзакций с отсутствующими полями"""
         incomplete_transactions = [
-            {'Сумма операции': -100},  # Нет даты
-            {'Дата операции': '01.01.2023 12:00:00'},  # Нет суммы
+            {"Сумма операции": -100},  # Нет даты
+            {"Дата операции": "01.01.2023 12:00:00"},  # Нет суммы
         ]
 
         result = get_top_transactions(incomplete_transactions)
@@ -81,19 +72,13 @@ class TestFilterTransactions:
     def test_filter_transactions_by_month(self):
         """Тест фильтрации транзакций по месяцу"""
         test_transactions = [
-            {
-                'Дата операции': '15.01.2023 12:00:00',
-                'Сумма операции': -100.0
-            },
-            {
-                'Дата операции': '20.02.2023 12:00:00',
-                'Сумма операции': -200.0
-            }
+            {"Дата операции": "15.01.2023 12:00:00", "Сумма операции": -100.0},
+            {"Дата операции": "20.02.2023 12:00:00", "Сумма операции": -200.0},
         ]
 
         result = filter_transactions_by_month(test_transactions, "2023-02-28 23:59:59")
         assert len(result) == 1
-        assert result[0]['Дата операции'] == '20.02.2023 12:00:00'
+        assert result[0]["Дата операции"] == "20.02.2023 12:00:00"
 
 
 class TestCurrencyAndStocks:
@@ -107,10 +92,10 @@ class TestCurrencyAndStocks:
 
         # Проверяем структуру данных
         for currency in result:
-            assert 'currency' in currency
-            assert 'rate' in currency
-            assert isinstance(currency['currency'], str)
-            assert isinstance(currency['rate'], (int, float))
+            assert "currency" in currency
+            assert "rate" in currency
+            assert isinstance(currency["currency"], str)
+            assert isinstance(currency["rate"], (int, float))
 
     def test_get_stock_prices(self):
         """Тест получения цен акций"""
@@ -120,10 +105,10 @@ class TestCurrencyAndStocks:
 
         # Проверяем структуру данных
         for stock in result:
-            assert 'stock' in stock
-            assert 'price' in stock
-            assert isinstance(stock['stock'], str)
-            assert isinstance(stock['price'], (int, float))
+            assert "stock" in stock
+            assert "price" in stock
+            assert isinstance(stock["stock"], str)
+            assert isinstance(stock["price"], (int, float))
 
 
 class TestAPIFunctions:
@@ -132,28 +117,28 @@ class TestAPIFunctions:
     def test_get_currency_rates_with_env_keys(self, monkeypatch):
         """Тест получения курсов валют с установленными ключами"""
         # Устанавливаем тестовые ключи
-        monkeypatch.setenv('EXCHANGE_RATE_API_KEY', 'test_key_123')
+        monkeypatch.setenv("EXCHANGE_RATE_API_KEY", "test_key_123")
 
         result = get_currency_rates()
         assert isinstance(result, list)
         assert len(result) > 0
 
         for currency in result:
-            assert 'currency' in currency
-            assert 'rate' in currency
+            assert "currency" in currency
+            assert "rate" in currency
 
     def test_get_stock_prices_with_env_keys(self, monkeypatch):
         """Тест получения цен акций с установленными ключами"""
         # Устанавливаем тестовые ключи
-        monkeypatch.setenv('ALPHA_VANTAGE_API_KEY', 'test_key_456')
+        monkeypatch.setenv("ALPHA_VANTAGE_API_KEY", "test_key_456")
 
         result = get_stock_prices()
         assert isinstance(result, list)
         assert len(result) > 0
 
         for stock in result:
-            assert 'stock' in stock
-            assert 'price' in stock
+            assert "stock" in stock
+            assert "price" in stock
 
 
 class TestErrorCases:
@@ -162,8 +147,8 @@ class TestErrorCases:
     def test_analyze_cards_with_invalid_data(self):
         """Тест анализа карт с некорректными данными"""
         invalid_transactions = [
-            {'Номер карты': None, 'Сумма операции': -100},
-            {'Номер карты': '', 'Сумма операции': -200},
+            {"Номер карты": None, "Сумма операции": -100},
+            {"Номер карты": "", "Сумма операции": -200},
         ]
 
         result = analyze_cards(invalid_transactions)
@@ -176,14 +161,25 @@ class TestErrorCases:
 
     def test_get_currency_rates_with_template_key(self, monkeypatch):
         """Тест получения курсов валют с шаблонным ключом"""
-        monkeypatch.setenv('EXCHANGE_RATE_API_KEY', 'your_exchange_rate_key_here')
+        monkeypatch.setenv("EXCHANGE_RATE_API_KEY", "your_exchange_rate_key_here")
         result = get_currency_rates()
         assert isinstance(result, list)
         assert len(result) > 0
 
     def test_get_stock_prices_with_template_key(self, monkeypatch):
         """Тест получения цен акций с шаблонным ключом"""
-        monkeypatch.setenv('ALPHA_VANTAGE_API_KEY', 'your_alpha_vantage_key_here')
+        monkeypatch.setenv("ALPHA_VANTAGE_API_KEY", "your_alpha_vantage_key_here")
         result = get_stock_prices()
         assert isinstance(result, list)
         assert len(result) > 0
+
+    def test_filter_transactions_by_month_invalid_dates(self):
+        """Тест фильтрации с невалидными датами"""
+        test_transactions = [
+            {"Дата операции": "invalid_date", "Сумма операции": -100.0},
+            {"Дата операции": "32.01.2023 12:00:00", "Сумма операции": -200.0},  # несуществующая дата
+        ]
+
+        result = filter_transactions_by_month(test_transactions, "2023-01-31 23:59:59")
+        # Ожидаем, что невалидные даты будут пропущены
+        assert len(result) == 0

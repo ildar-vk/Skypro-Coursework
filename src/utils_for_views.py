@@ -4,12 +4,13 @@
 """
 
 import logging
-import requests
 from datetime import datetime
 from typing import Any, Dict, List
-from config import Config
 
 import pandas as pd
+import requests
+
+from config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -42,13 +43,13 @@ def filter_transactions_by_month(transactions: List[Dict], target_date: str) -> 
             return []
 
         # Парсим целевую дату
-        target_dt = pd.to_datetime(target_date, format='%Y-%m-%d %H:%M:%S')
+        target_dt = pd.to_datetime(target_date, format="%Y-%m-%d %H:%M:%S")
 
         # Для отладки - посмотрим на первые несколько дат в данных
         sample_dates = []
         for i, t in enumerate(transactions[:5]):
-            if 'Дата операции' in t:
-                sample_dates.append(t['Дата операции'])
+            if "Дата операции" in t:
+                sample_dates.append(t["Дата операции"])
         logger.info(f"Пример дат в данных: {sample_dates}")
         logger.info(f"Целевая дата фильтрации: {target_dt}")
 
@@ -57,13 +58,13 @@ def filter_transactions_by_month(transactions: List[Dict], target_date: str) -> 
 
         for transaction in transactions:
             try:
-                op_date_str = transaction.get('Дата операции')
+                op_date_str = transaction.get("Дата операции")
                 if not op_date_str or pd.isna(op_date_str):
                     skipped_count += 1
                     continue
 
                 # Парсим дату операции (формат: 'дд.мм.гггг чч:мм:сс')
-                op_date = pd.to_datetime(op_date_str, format='%d.%m.%Y %H:%M:%S')
+                op_date = pd.to_datetime(op_date_str, format="%d.%m.%Y %H:%M:%S")
 
                 # Проверяем, что дата операции в том же году и месяце, что и целевая
                 if op_date.year == target_dt.year and op_date.month == target_dt.month:
@@ -75,7 +76,8 @@ def filter_transactions_by_month(transactions: List[Dict], target_date: str) -> 
                 continue
 
         logger.info(
-            f"Отфильтровано {len(filtered)} транзакций за {target_dt.month}.{target_dt.year}, пропущено {skipped_count}")
+            f"Отфильтровано {len(filtered)} транзакций за {target_dt.month}.{target_dt.year}, пропущено {skipped_count}"
+        )
         return filtered
 
     except Exception as e:
@@ -180,13 +182,13 @@ def get_currency_rates() -> List[Dict[str, Any]]:
 
         if response.status_code == 200:
             data = response.json()
-            rates = data.get('rates', {})
+            rates = data.get("rates", {})
 
             # Возвращаем курсы для основных валют
             return [
-                {"currency": "USD", "rate": round(rates.get('USD', 75.0), 2)},
-                {"currency": "EUR", "rate": round(rates.get('EUR', 85.0), 2)},
-                {"currency": "GBP", "rate": round(rates.get('GBP', 95.0), 2)},
+                {"currency": "USD", "rate": round(rates.get("USD", 75.0), 2)},
+                {"currency": "EUR", "rate": round(rates.get("EUR", 85.0), 2)},
+                {"currency": "GBP", "rate": round(rates.get("GBP", 95.0), 2)},
             ]
         else:
             logger.warning(f"Ошибка API курсов валют: {response.status_code}")
@@ -199,10 +201,7 @@ def get_currency_rates() -> List[Dict[str, Any]]:
 
 def get_currency_rates_stub() -> List[Dict[str, Any]]:
     """Заглушка для курсов валют"""
-    return [
-        {"currency": "USD", "rate": 75.0},
-        {"currency": "EUR", "rate": 85.0}
-    ]
+    return [{"currency": "USD", "rate": 75.0}, {"currency": "EUR", "rate": 85.0}]
 
 
 def get_stock_prices() -> List[Dict[str, Any]]:
@@ -220,24 +219,17 @@ def get_stock_prices() -> List[Dict[str, Any]]:
         stock_prices = []
 
         for symbol in stocks:
-            params = {
-                'function': 'GLOBAL_QUOTE',
-                'symbol': symbol,
-                'apikey': Config.ALPHA_VANTAGE_API_KEY
-            }
+            params = {"function": "GLOBAL_QUOTE", "symbol": symbol, "apikey": Config.ALPHA_VANTAGE_API_KEY}
 
             response = requests.get(Config.ALPHA_VANTAGE_URL, params=params, timeout=10)
 
             if response.status_code == 200:
                 data = response.json()
-                quote = data.get('Global Quote', {})
-                price = float(quote.get('05. price', 0))
+                quote = data.get("Global Quote", {})
+                price = float(quote.get("05. price", 0))
 
                 if price > 0:
-                    stock_prices.append({
-                        "stock": symbol,
-                        "price": round(price, 2)
-                    })
+                    stock_prices.append({"stock": symbol, "price": round(price, 2)})
             else:
                 logger.warning(f"Ошибка API для акции {symbol}: {response.status_code}")
 
@@ -254,8 +246,4 @@ def get_stock_prices() -> List[Dict[str, Any]]:
 
 def get_stock_prices_stub() -> List[Dict[str, Any]]:
     """Заглушка для цен акций"""
-    return [
-        {"stock": "AAPL", "price": 150.0},
-        {"stock": "AMZN", "price": 3200.0},
-        {"stock": "GOOGL", "price": 2800.0}
-    ]
+    return [{"stock": "AAPL", "price": 150.0}, {"stock": "AMZN", "price": 3200.0}, {"stock": "GOOGL", "price": 2800.0}]

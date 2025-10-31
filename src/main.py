@@ -1,6 +1,8 @@
 import json
 import logging
 
+import pandas as pd
+
 from utils import process_bank_file, setup_logging
 from views import home_page
 
@@ -21,13 +23,13 @@ def main() -> None:
         print(f"Готово! Загружено {len(df)} транзакций")
 
         # Определяем подходящую дату на основе данных
-        if not df.empty and 'Дата операции' in df.columns:
+        if not df.empty and "Дата операции" in df.columns:
             # Находим максимальную дату в данных
-            max_date_str = df['Дата операции'].max()
+            max_date_str = df["Дата операции"].max()
             try:
-                max_date = pd.to_datetime(max_date_str, format='%d.%m.%Y %H:%M:%S')
+                max_date = pd.to_datetime(max_date_str, format="%d.%m.%Y %H:%M:%S")
                 # Используем последний день данных как целевую дату
-                test_date = max_date.strftime('%Y-%m-%d %H:%M:%S')
+                test_date = max_date.strftime("%Y-%m-%d %H:%M:%S")
                 print(f"   • Используем дату из данных: {test_date}")
             except:
                 test_date = "2021-12-31 14:30:00"  # fallback
@@ -104,10 +106,12 @@ def main() -> None:
     except Exception as e:
         logger.error(f"Ошибка в main: {e}")
         import traceback
+
         logger.error(traceback.format_exc())
         print(f"Критическая ошибка: {e}")
         print("Проверь логи в файле 'bank_analysis.log'")
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     main()
