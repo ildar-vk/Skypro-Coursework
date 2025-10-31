@@ -31,10 +31,10 @@ def main() -> None:
                 # Используем последний день данных как целевую дату
                 test_date = max_date.strftime("%Y-%m-%d %H:%M:%S")
                 print(f"   • Используем дату из данных: {test_date}")
-            except:
-                test_date = "2021-12-31 14:30:00"  # fallback
+            except Exception:
+                test_date = "2021-12-31 14:30:00"  # возврат
         else:
-            test_date = "2021-12-31 14:30:00"  # fallback
+            test_date = "2021-12-31 14:30:00"  # возврат
 
         print(f"   • Диапазон дат в данных: от {df['Дата операции'].min()} до {df['Дата операции'].max()}")
 

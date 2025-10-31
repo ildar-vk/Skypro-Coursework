@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from src.utils_for_views import (
     analyze_cards,
     filter_transactions_by_month,
@@ -183,3 +185,30 @@ class TestErrorCases:
         result = filter_transactions_by_month(test_transactions, "2023-01-31 23:59:59")
         # Ожидаем, что невалидные даты будут пропущены
         assert len(result) == 0
+
+class TestGetGreetingWithTime:
+    """Тесты для get_greeting с разным временем"""
+
+    @patch('src.utils_for_views.datetime')
+    def test_get_greeting_morning(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 8
+        result = get_greeting()
+        assert result == "Доброе утро"
+
+    @patch('src.utils_for_views.datetime')
+    def test_get_greeting_afternoon(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 14
+        result = get_greeting()
+        assert result == "Добрый день"
+
+    @patch('src.utils_for_views.datetime')
+    def test_get_greeting_evening(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 20
+        result = get_greeting()
+        assert result == "Добрый вечер"
+
+    @patch('src.utils_for_views.datetime')
+    def test_get_greeting_night(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 2
+        result = get_greeting()
+        assert result == "Доброй ночи"

@@ -48,11 +48,11 @@ def get_excel_engine(file_extension: str) -> str | None:
     return engine
 
 
-def read_excel_file(file_path: str, engine: str) -> pd.DataFrame:
+def read_excel_file(file_path: str, engine: str | None) -> pd.DataFrame:
     """Читаем содержимое файла с указанным движком"""
     try:
         logger.info(f"[{__name__}.read_excel_file] Начало чтения файла {file_path} c движком {engine}")
-        df = pd.read_excel(file_path, engine=engine) # type: ignore
+        df = pd.read_excel(file_path, engine=engine)  # type: ignore
         logger.info(f"[{__name__}.read_excel_file] Файл успешно прочитан,\n Количество строк {len(df)}")
         return df
     except Exception as e:

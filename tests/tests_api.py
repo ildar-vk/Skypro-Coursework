@@ -1,6 +1,6 @@
 from unittest.mock import Mock, patch
 
-from src.utils_for_views import get_currency_rates, get_stock_prices
+from src.utils_for_views import get_currency_rates
 
 
 @patch("src.utils_for_views.requests.get")

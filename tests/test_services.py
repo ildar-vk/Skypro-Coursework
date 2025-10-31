@@ -1,10 +1,11 @@
 """Тесты для модуля services"""
 
+from src import services
+
 
 def test_services_module_exists():
     """Тест что модуль services существует"""
     try:
-        import src.services
 
         assert True
     except ImportError:
@@ -13,6 +14,5 @@ def test_services_module_exists():
 
 def test_services_module_can_be_imported():
     """Тест что модуль services может быть импортирован"""
-    from src import services
 
     assert services is not None
