@@ -26,16 +26,16 @@
 # PEP8 и кодстайл
 
 ## Установи если нет
-pip install autopep8 flake8 black
+    pip install autopep8 flake8 black
 
 ## Автоисправление стиля
-autopep8 --in-place --aggressive --recursive src/
+    autopep8 --in-place --aggressive --recursive src/
 
 ## Или black (более строгий)
-black src/
+    black src/
 
 ## Проверка без исправлений
-flake8 src/
+    flake8 src/
 
 #  Настройка API
 
@@ -62,10 +62,10 @@ EXCHANGE_RATE_API_KEY=ваш_ключ_здесь
 # Проверка что всё работает
 
 ## Запускаем основной код
-poetry run python src/main.py
+    poetry run python src/main.py
 
 ## Запускаем тесты
-poetry run pytest tests/ -v
+    poetry run pytest tests/ -v
 
 ## Проверяем покрытие
-poetry run pytest --cov=src --cov-report=term-missing tests/
+    poetry run pytest --cov=src --cov-report=term-missing tests/
