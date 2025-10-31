@@ -13,7 +13,7 @@
 ## Установка
 
 # Клонируйте репозиторий:
-   ```bash
+   
    git clone <repository-url>
    cd Courcework
 # Установите зависимости с помощью Poetry:
